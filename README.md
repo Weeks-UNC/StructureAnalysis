@@ -34,7 +34,7 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 `-u,--upperPercentile FLOAT` - Apply an upper cutoff as well, so all deletions are below this percentile. For example if percentile is set at 90 and upperPercentile is set to 95 only deletions between the 90th and 95th percentiles will be included in the histogram.  
 `-c,--color PYPLOTCOLOR` - Change the color of the histogram from the default of black. Requires a color name compatible with pyplot. Acceptable color names here: https://matplotlib.org/stable/gallery/color/named_colors.html  
 `--experimentalOnly` - Only plot the histogram of distances from the deletion file, not the set of all possible distances in the PDB.    
-`--inclusivePercentile` - By default the percentile cutoff is calculated from only the set of nucleotide pairs present in the given PDB file. This option changes the percentile cutoff calculation to include all nucleotide pairs. This option will only affect the output if nucleotides are missing from the PDB. `--topDels INT` - Limits pairs plotted to given number rather than percentile eg. most frequent 100 pairs.    
+`--inclusivePercentile` - By default the percentile cutoff is calculated from only the set of nucleotide pairs present in the given PDB file. This option changes the percentile cutoff calculation to include all nucleotide pairs. This option will only affect the output if nucleotides are missing from the PDB.   `--topDels INT` - Limits pairs plotted to given number rather than percentile eg. most frequent 100 pairs.    
 `--lengthAdjust SEQUENCELENGTH` - Create background histogram from random Nt pairs that reflect the 1D length of deletions. Requires length of sequence.  
 `--shapeFile FILE.shape` - Used with other options to limit pairs plotted by shape reactivities provided in file.  
 `--shapeCutoff FLOAT` - Limits pairs plotted to those where both nucleotides have a shape reactivity above cutoff input. Use with --shapeFile.  
@@ -48,16 +48,30 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 ### Output Description  
 
 # draw_3D_RNA_contacts.py  
+Draws connections between set of nucleotide pairs on a pdb file using the pymol distance command.  
 
 ### Requirements  
+PyMol - Should be executable on the command line.  
+
 ### Required Inputs  
+**Contact File** - Text file of nucleotide pairs and frequencies. See *File Description* at bottom of readme for more detail.  
+**PDB File** - Structure file in pdb format. It is critical that the residue numbering matches that used in the deletion file.  
+
 ### Execution Instructions  
-### Optional Inputs  
-### Output Description 
+This script is designed to run via PyMol on the command line.  
+`pymol -qcr draw_3D_RNA_contacts.py -- contactFile.txt structure.pdb `  
+The `-qcr` flag executes the script via pymol without opening the GUI or printing a startup message.  
+
+### Output Description  
+Generates a pymol session file of the pdb with contacts drawn. The ouput file name is the contact file name with a .pse suffix. For example if the input contact file was RNasePContacts.txt the output would be RNasePContacts.pse  
 
 # AnnotateSecondaryStructure.py  
+Annotates a varna or xrna secondary structure file and generates a SVG file ouput. Available annotations include coloring nucleotides, changing font size and drawing contacts between nucleotides, among others.  
+While some of these annotations can be accomplished in the VARNA and/or xRNA programs, their implementation here is meant to be quicker and more user friendly.  
 
 ### Requirements  
+This script requires the python 2 modules matplotlib, numpy, and Biopython.  
+
 ### Required Inputs  
 ### Execution Instructions  
 ### Optional Inputs  
@@ -92,3 +106,14 @@ Subsequent lines follow the same 4 column format:
 - Column 2 = Deletion start site.
 - Column 3 = Deletion stop site.
 - Column 4 = Deletion rate frequency. This value is often normalized by read depth.
+
+**Contact File**  
+Example:  
+nt1 nt2 rate  
+123 184 0.0017623086  
+81  94  0.0013324450  
+
+The first line is a header. The header line must be present but the contents are unimportant.  
+- Column 1 = Contact start site.  
+- Column 2 = Contact stop site.  
+- Column 3 = Contact frequency.  
