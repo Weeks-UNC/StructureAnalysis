@@ -34,7 +34,8 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 `-u,--upperPercentile FLOAT` - Apply an upper cutoff as well, so all deletions are below this percentile. For example if percentile is set at 90 and upperPercentile is set to 95 only deletions between the 90th and 95th percentiles will be included in the histogram.  
 `-c,--color PYPLOTCOLOR` - Change the color of the histogram from the default of black. Requires a color name compatible with pyplot. Acceptable color names here: https://matplotlib.org/stable/gallery/color/named_colors.html  
 `--experimentalOnly` - Only plot the histogram of distances from the deletion file, not the set of all possible distances in the PDB.    
-`--inclusivePercentile` - By default the percentile cutoff is calculated from only the set of nucleotide pairs present in the given PDB file. This option changes the percentile cutoff calculation to include all nucleotide pairs. This option will only affect the output if nucleotides are missing from the PDB.   `--topDels INT` - Limits pairs plotted to given number rather than percentile eg. most frequent 100 pairs.    
+`--inclusivePercentile` - By default the percentile cutoff is calculated from only the set of nucleotide pairs present in the given PDB file. This option changes the percentile cutoff calculation to include all nucleotide pairs. This option will only affect the output if nucleotides are missing from the PDB.
+  `--topDels INT` - Limits pairs plotted to given number rather than percentile eg. most frequent 100 pairs.    
 `--lengthAdjust SEQUENCELENGTH` - Create background histogram from random Nt pairs that reflect the 1D length of deletions. Requires length of sequence.  
 `--shapeFile FILE.shape` - Used with other options to limit pairs plotted by shape reactivities provided in file.  
 `--shapeCutoff FLOAT` - Limits pairs plotted to those where both nucleotides have a shape reactivity above cutoff input. Use with --shapeFile.  
@@ -73,9 +74,36 @@ While some of these annotations can be accomplished in the VARNA and/or xRNA pro
 This script requires the python 2 modules matplotlib, numpy, and Biopython.  
 
 ### Required Inputs  
+**Input** - Varna or xRNA file containing a secondary structure. To obtain these files use the programs[VARNA](http://varna.lri.fr/) or [xRNA](http://rna.ucsc.edu/rnacenter/xrna/). Make sure to save your structure in the .varna or .xrna format. If the input is an xRNA file you must use the -x option. 
+**Output** - Filename for output file. Should end in .svg.  
+
 ### Execution Instructions  
+`python AnnotateSecondaryStructure.py inputStructure.VARNA outputFileName.svg`  
+
 ### Optional Inputs  
+`-x,--xrna` - Use this flag if the input file is in the xRNA format.  
+`--ct SecondaryStructure.ct` - Colors structure by its agreement with provided reference structure. Base pairs present in both structures are colored green. Those present in only the CT file are colored red and those only in the varna are colored purple.    
+`-e,--enzyme`
+`-d,--diff` - Changes chemical probing type to differential, coloring cutoffs +=0.3.
+`-c,--colors ColorFile` - Colors circle behind nucleotide letter according to numbers in input file. 0 for white, 1 for red, 2 for grey, 3 for blue, 4 for orange, 5 for purple, 6 for black. Color file should be a text file with a number for each nucleotide on its own line. The number in line 1 colors nt 1, line 2 nt 2 and so on.  
+`-l,--lines "ContactFile.txt LowCutoff HighCutoff"` - Draws lines between nucleotides specified in contact file. Contacts with rates above the low cutoff value are colored orange, values above the high cutoff are colored red. Contacts with rates below the low cutoff are not plotted. See *File Description* section at bottom of readme for in depth description of contact file format.
+`-p,--percentileLines "DeletionFile.txt Percentile"` - Draws lines between nucleotide pairs specified in deletion file. Only draws lines for deletions with rates above given percentile. Multiple percentiles, up to 5, may be entered in ascending order. The order of line coloring, corresponding to percentiles entered, is cyan, read, orange, green, blue. See *File Description* section at bottom of readme for in depth description of deletion file format.  
+`-r,--rawCountLines "DeletionFile.txt CountX"`- Similar to --percentLines but limits to the top X most frequent deletions. Up to 5 cutoffs may be entered, in ascending order.  
+`-cl,--categoryLines "DeletionFile.txt Percentile"` - Similar to --percentileLines except the deletion file should have a fifth column where every column is assigned a category number, 0-2. Deletions in category 0 are colored green, 1 are violet and 2 are orange. Unlike --percentileLines, only one percentile may be entered.  
+`--distanceLines "DeletionFile.txt 3DStructure.pdb Percentile` - Similar to --percentileLines except lines are colored by their 3D distance, as determined from the input pdb file. Lines with distances less than 10 angstroms are colored pure green, longer than 50 are pure blue. Distances between 10 and 50 are colored on a proportional gradient from green to blue. If one or both nts in a pair are missing from the pdb, the line is colored grey. Unlike --percentileLines, only one percentile may be entered.  
+`--centralPoint` - Use with --distanceLines. Calculates 3D distances between nucleotide pairs by the central point of the nucleobase rather than the default 2' hydroxyl group.  
+`-s,--shape reactivityData.shape` - Colors nucleotides by shape reactivity. Reactivites above 0.8 are colored red, above 0.4 are colored orange, below -0.4 are colored black and -999 values are colored grey.  
+`--dms DMSReactivityData.shape` - Similar to the --shape option. Sets color limits to 0.2 and 0.4  
+`-o,--offset OffsetNum` - Adds the input offset number to nucleotide numbering. Eg. if the offset number is 9, nucleotide 1 would be labeled as 10.  
+`--offsetStart StartNum ` - Only add the offset to the start number nucleotide and beyond. Allows a gap to be introduced to nucleotide numbering. Use with --offset option.  
+`-n,--nonCanonicalPairs pairsFile.txt` - Plots a circle between noncanonical base pairs. Input is a 2 column text file where each line contains the nucleotide numbers of a noncanonical base pair. If the provided varna or xrna input already displays these nucleotides as paired, the circle is overlaid on to the base pairing line.  
+`--switch` - reverse the pairing coloring scheme used by --ct.  
+`-f,--ntFontSize FontSizeNum` - Sets the font size for all nucleotides. The default font size is 16.  
+`--hideNtNums` - Don't display nucleotide numbering.  
+
 ### Output Description  
+The script will generate a visualization of the secondary structure, with annotations, in the SVG format. SVG files can be open with dedicated SVG viewers like Gapplin or Adobe SVG viewer. Most viewers will allow the user to export svg files in png or pdf formats.  
+SVG files can be edited with Adobe Illustrator.
 
 # contactDistanceHistogram.py  
 
