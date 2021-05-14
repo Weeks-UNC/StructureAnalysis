@@ -1,18 +1,18 @@
-# StructureAnalysis
+# StructureAnalysis  
 Collection of Scripts to Analyze 2º and 3º RNA Structure with a focus on internucleotide measurements.  
 Scripts were designed to work with outputs of ShapeJumper https://github.com/Weeks-UNC/ShapeJumper_V1  
 However, they can be applied to work with other internucleotide pair data sets.  
-[3DDistanceHistogram.py]()  
-[draw_3D_RNA_contacts.py ]()  
-[AnnotateSecondaryStructure.py]()  
-[contactDistanceHistogram.py]()  
-[deletionLengthDistribution.py]()  
-[Common input files types tsed]()  
+[3DDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#3DDistanceHistogram.py)  
+[draw_3D_RNA_contacts.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#draw_3D_RNA_contacts.py)  
+[AnnotateSecondaryStructure.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#AnnotateSecondaryStructure.py)  
+[contactDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#contactDistanceHistogram.py)  
+[deletionLengthDistribution.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#deletionLengthDistribution.py)  
+[Common input files types used](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#file-descriptions)  
 
 ### General Requirements
 All scripts require python 2.7  
 
-### Installation  
+### Installation
 clone this package to your home directory with this command:  
 `git clone https://github.com/Weeks-UNC/StructureAnalysis.git`  
 
@@ -22,21 +22,21 @@ The pairs mapped are limited to those with a frequency above a given percentile.
 The distance histrogram is plotted against a histogram of all pairwise distances in the given pdb structure.  
 
 
-### Requirements  
+### Requirements
 This script requires the python 2 modules matplotlib, numpy, and Biopython.  
 The python script RNAtools2 is also required, available here: https://github.com/Weeks-UNC/RNATools  
 
-### Required Inputs  
+### Required Inputs
 **PDB File** - Structure file in pdb format. It is critical that the residue numbering matches that used in the deletion file.    
 **Deletion File** - list of nucleotide pairs and their frequency. See *File Description* section at bottom of readme for more detail.  
 **Gene** - Input a gene or sequence name to limit nucleotide pairs plotted to just those from a specific sequence name contained in the deletion file.
 **Percentile** - Decimal value between 0 and 100. Limits pairs plotted to those with a frequency above this given percentile.  
 
-### Execution Instructions  
+### Execution Instructions
 `python 3DDistanceHistogram.py TertiaryStructure.pdb DeletionFile.txt geneName PercentileNumber`  
 Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5`  
 
-### Optional Inputs  
+### Optional Inputs
 `-u,--upperPercentile FLOAT` - Apply an upper cutoff as well, so all deletions are below this percentile. For example if percentile is set at 90 and upperPercentile is set to 95 only deletions between the 90th and 95th percentiles will be included in the histogram.  
 `-c,--color PYPLOTCOLOR` - Change the color of the histogram from the default of black. Requires a color name compatible with pyplot. Acceptable color names here: https://matplotlib.org/stable/gallery/color/named_colors.html  
 `--experimentalOnly` - Only plot the histogram of distances from the deletion file, not the set of all possible distances in the PDB.    
@@ -52,42 +52,42 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 `--corrChi` - Allows deletion file input to be in chi square correlation file format. See https://github.com/Weeks-UNC/RingMapper  
 `--StrucFilt STRUCTURE.ct CONTACTDISTANCE` - Limits nucleotide pairs plotted to those with a contact distance above given cutoff. See https://rna.urmc.rochester.edu/Text/File_Formats.html for description of CT file format.  
 
-### Output Description  
+### Output Description
 Generates a pdf containing a histogram of the 3D distances between nucleotide pairs. This is in a black outline and overlaid onto a solid light purple histogram showing all possible 3D pairwise distances in the provided PDB structure.   
 
-# draw_3D_RNA_contacts.py  
+# draw_3D_RNA_contacts.py
 Draws connections between set of nucleotide pairs on a pdb file using the pymol distance command.  
 
-### Requirements  
+### Requirements
 PyMol - Should be executable on the command line.  
 
-### Required Inputs  
+### Required Inputs
 **Contact File** - Text file of nucleotide pairs and frequencies. See *File Description* at bottom of readme for more detail.  
 **PDB File** - Structure file in pdb format. It is critical that the residue numbering matches that used in the deletion file.  
 
-### Execution Instructions  
+### Execution Instructions
 This script is designed to run via PyMol on the command line.  
 `pymol -qcr draw_3D_RNA_contacts.py -- contactFile.txt structure.pdb `  
 The `-qcr` flag executes the script via pymol without opening the GUI or printing a startup message.  
 
-### Output Description  
+### Output Description
 Generates a pymol session file of the pdb with contacts drawn. The ouput file name is the contact file name with a .pse suffix. For example if the input contact file was RNasePContacts.txt the output would be RNasePContacts.pse  
 
 # AnnotateSecondaryStructure.py  
 Annotates a varna or xrna secondary structure file and generates a SVG file ouput. Available annotations include coloring nucleotides, changing font size and drawing contacts between nucleotides, among others.  
 While some of these annotations can be accomplished in the VARNA and/or xRNA programs, their implementation here is meant to be quicker and more user friendly.  
 
-### Requirements  
+### Requirements
 This script requires the python 2 modules matplotlib, numpy, and Biopython.  
 
-### Required Inputs  
+### Required Inputs
 **Input** - Varna or xRNA file containing a secondary structure. To obtain these files use the programs[VARNA](http://varna.lri.fr/) or [xRNA](http://rna.ucsc.edu/rnacenter/xrna/). Make sure to save your structure in the .varna or .xrna format. If the input is an xRNA file you must use the -x option. 
 **Output** - Filename for output file. Should end in .svg.  
 
-### Execution Instructions  
+### Execution Instructions
 `python AnnotateSecondaryStructure.py inputStructure.VARNA outputFileName.svg`  
 
-### Optional Inputs  
+### Optional Inputs
 `-x,--xrna` - Use this flag if the input file is in the xRNA format.  
 `--ct SecondaryStructure.ct` - Colors structure by its agreement with provided reference structure. Base pairs present in both structures are colored green. Those present in only the CT file are colored red and those only in the varna are colored purple.    
 `-e,--enzyme`  
@@ -108,7 +108,7 @@ This script requires the python 2 modules matplotlib, numpy, and Biopython.
 `-f,--ntFontSize FontSizeNum` - Sets the font size for all nucleotides. The default font size is 16.  
 `--hideNtNums` - Don't display nucleotide numbering.  
 
-### Output Description  
+### Output Description
 The script will generate a visualization of the secondary structure, with annotations, in the SVG format. SVG files can be open with dedicated SVG viewers like Gapplin or Adobe SVG viewer. Most viewers will allow the user to export svg files in png or pdf formats.  
 SVG files can be edited with Adobe Illustrator.
 
@@ -118,36 +118,36 @@ The contact distance histrogram is plotted against a histogram of all pairwise d
 
 *Contact Distance* is a measurement of the shortest path between two nucleotides where the RNA secondary structure is represented as a graph with nucleotides as vertices and with base pair and backbone connections as edges. The contact distance is calculated using a "breadth first search" algorithm, implemented in RNAtools2.  
 
-### Requirements  
+### Requirements
 This script requires the python 2 modules matplotlib and numpy.  
 The python script RNAtools2 is also required, available here: https://github.com/Weeks-UNC/RNATools   
 
-### Required Inputs  
+### Required Inputs
 **Deletion File** - list of nucleotide pairs and their frequency. See *File Description* section at bottom of readme for more detail.  
 **Gene** - Input a gene or sequence name to limit nucleotide pairs plotted to just those from a specific sequence name contained in the deletion file.  
 **CT File** - Text File in ct format describing secondary structure. See *File Descriptions* at bottom of README for more details.  
 
-### Execution Instructions  
+### Execution Instructions
 `python contactDistanceHistogram.py DeletionFile.txt geneName SecondaryStructure.ct`  
 Example: `python contactDistanceHistogram.py RNasePDeletions.txt rnasep RNasePSecondaryStructure.ct`  
 
-### Optional Inputs  
+### Optional Inputs
 `--lengthAdjust` - Create background histogram from random Nt pairs that reflect the 1D length of deletions.   
 `--seqLength INT` - Provide length of sequence in ct file to limit input deletion pairs to just those within the ct file. Useful for preventing "out of bounds" errors.  
 
-### Output Description  
+### Output Description
 Generates a pdf with 3 contact distance histograms, one of all contact distances in the deletion file, one of the 97th percentile and one of the 98th. All histograms are plotted over a histogram of all possible contact distances in the secondary structure.  
 
 # deletionLengthDistribution.py  
 
-### Requirements  
-### Required Inputs  
-### Execution Instructions  
-### Optional Inputs  
-### Output Description  
+### Requirements
+### Required Inputs
+### Execution Instructions
+### Optional Inputs
+### Output Description
 
 # File Descriptions  
-**Deletion File**  
+### Deletion File
 Example:  
 Total Reads Aligned:11450       Total Deletions:728.0  
 rnasep  123     184     0.0017623086  
@@ -160,7 +160,7 @@ Subsequent lines follow the same 4 column format:
 - Column 3 = Deletion stop site.
 - Column 4 = Deletion rate frequency. This value is often normalized by read depth.
 
-**Contact File**  
+### Contact File
 Example:  
 nt1 nt2 rate  
 123 184 0.0017623086  
