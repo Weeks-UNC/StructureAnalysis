@@ -2,11 +2,12 @@
 Collection of Scripts to Analyze 2º and 3º RNA Structure with a focus on internucleotide measurements.  
 Scripts were designed to work with outputs of ShapeJumper https://github.com/Weeks-UNC/ShapeJumper_V1  
 However, they can be applied to work with other internucleotide pair data sets.  
-[3DDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#3DDistanceHistogram.py)  
-[draw_3D_RNA_contacts.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#draw_3D_RNA_contacts.py)  
-[AnnotateSecondaryStructure.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#AnnotateSecondaryStructure.py)  
-[contactDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#contactDistanceHistogram.py)  
-[deletionLengthDistribution.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#deletionLengthDistribution.py)  
+
+[3DDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#3DDistanceHistogrampy)  
+[draw_3D_RNA_contacts.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#draw_3D_RNA_contactspy)  
+[AnnotateSecondaryStructure.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#AnnotateSecondaryStructurepy)  
+[contactDistanceHistogram.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#contactDistanceHistogrampy)  
+[deletionLengthDistribution.py](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#deletionLengthDistributionpy)  
 [Common input files types used](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/README.md#file-descriptions)  
 
 ### General Requirements
