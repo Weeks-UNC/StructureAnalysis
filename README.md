@@ -2,6 +2,12 @@
 Collection of Scripts to Analyze 2º and 3º RNA Structure with a focus on internucleotide measurements.  
 Scripts were designed to work with outputs of ShapeJumper https://github.com/Weeks-UNC/ShapeJumper_V1  
 However, they can be applied to work with other internucleotide pair data sets.  
+[3DDistanceHistogram.py]()  
+[draw_3D_RNA_contacts.py ]()  
+[AnnotateSecondaryStructure.py]()  
+[contactDistanceHistogram.py]()  
+[deletionLengthDistribution.py]()  
+[Common input files types tsed]()  
 
 ### General Requirements
 All scripts require python 2.7  
@@ -47,6 +53,7 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 `--StrucFilt STRUCTURE.ct CONTACTDISTANCE` - Limits nucleotide pairs plotted to those with a contact distance above given cutoff. See https://rna.urmc.rochester.edu/Text/File_Formats.html for description of CT file format.  
 
 ### Output Description  
+Generates a pdf containing a histogram of the 3D distances between nucleotide pairs. This is in a black outline and overlaid onto a solid light purple histogram showing all possible 3D pairwise distances in the provided PDB structure.   
 
 # draw_3D_RNA_contacts.py  
 Draws connections between set of nucleotide pairs on a pdb file using the pymol distance command.  
@@ -83,8 +90,8 @@ This script requires the python 2 modules matplotlib, numpy, and Biopython.
 ### Optional Inputs  
 `-x,--xrna` - Use this flag if the input file is in the xRNA format.  
 `--ct SecondaryStructure.ct` - Colors structure by its agreement with provided reference structure. Base pairs present in both structures are colored green. Those present in only the CT file are colored red and those only in the varna are colored purple.    
-`-e,--enzyme`
-`-d,--diff` - Changes chemical probing type to differential, coloring cutoffs +=0.3.
+`-e,--enzyme`  
+`-d,--diff` - Changes chemical probing type to differential, coloring cutoffs +=0.3.  
 `-c,--colors ColorFile` - Colors circle behind nucleotide letter according to numbers in input file. 0 for white, 1 for red, 2 for grey, 3 for blue, 4 for orange, 5 for purple, 6 for black. Color file should be a text file with a number for each nucleotide on its own line. The number in line 1 colors nt 1, line 2 nt 2 and so on.  
 `-l,--lines "ContactFile.txt LowCutoff HighCutoff"` - Draws lines between nucleotides specified in contact file. Contacts with rates above the low cutoff value are colored orange, values above the high cutoff are colored red. Contacts with rates below the low cutoff are not plotted. See *File Description* section at bottom of readme for in depth description of contact file format.
 `-p,--percentileLines "DeletionFile.txt Percentile"` - Draws lines between nucleotide pairs specified in deletion file. Only draws lines for deletions with rates above given percentile. Multiple percentiles, up to 5, may be entered in ascending order. The order of line coloring, corresponding to percentiles entered, is cyan, read, orange, green, blue. See *File Description* section at bottom of readme for in depth description of deletion file format.  
@@ -106,12 +113,30 @@ The script will generate a visualization of the secondary structure, with annota
 SVG files can be edited with Adobe Illustrator.
 
 # contactDistanceHistogram.py  
+Maps internucleotide pairs onto provided secondary structure in ct format. Returns a histogram of the contact distances between these pairs.  
+The contact distance histrogram is plotted against a histogram of all pairwise distances in the given secondary structure.  
+
+*Contact Distance* is a measurement of the shortest path between two nucleotides where the RNA secondary structure is represented as a graph with nucleotides as vertices and with base pair and backbone connections as edges. The contact distance is calculated using a "breadth first search" algorithm, implemented in RNAtools2.  
 
 ### Requirements  
+This script requires the python 2 modules matplotlib and numpy.  
+The python script RNAtools2 is also required, available here: https://github.com/Weeks-UNC/RNATools   
+
 ### Required Inputs  
+**Deletion File** - list of nucleotide pairs and their frequency. See *File Description* section at bottom of readme for more detail.  
+**Gene** - Input a gene or sequence name to limit nucleotide pairs plotted to just those from a specific sequence name contained in the deletion file.  
+**CT File** - Text File in ct format describing secondary structure. See *File Descriptions* at bottom of README for more details.  
+
 ### Execution Instructions  
+`python contactDistanceHistogram.py DeletionFile.txt geneName SecondaryStructure.ct`  
+Example: `python contactDistanceHistogram.py RNasePDeletions.txt rnasep RNasePSecondaryStructure.ct`  
+
 ### Optional Inputs  
+`--lengthAdjust` - Create background histogram from random Nt pairs that reflect the 1D length of deletions.   
+`--seqLength INT` - Provide length of sequence in ct file to limit input deletion pairs to just those within the ct file. Useful for preventing "out of bounds" errors.  
+
 ### Output Description  
+Generates a pdf with 3 contact distance histograms, one of all contact distances in the deletion file, one of the 97th percentile and one of the 98th. All histograms are plotted over a histogram of all possible contact distances in the secondary structure.  
 
 # deletionLengthDistribution.py  
 
@@ -145,3 +170,7 @@ The first line is a header. The header line must be present but the contents are
 - Column 1 = Contact start site.  
 - Column 2 = Contact stop site.  
 - Column 3 = Contact frequency.  
+
+**CT File**
+Format to describe RNA secondary structure.
+See https://rna.urmc.rochester.edu/Text/File_Formats.html for detailed description.
