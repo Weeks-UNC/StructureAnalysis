@@ -56,6 +56,11 @@ Example: `python 3DDistanceHistogram.py 3DHS.pdb RNasePDeletions.txt rnasep 97.5
 ### Output Description
 Generates a pdf containing a histogram of the 3D distances between nucleotide pairs. This is in a black outline and overlaid onto a solid light purple histogram showing all possible 3D pairwise distances in the provided PDB structure.   
 
+Example Output:  
+3D histogram of 95th percentile of RNase P deletion set generated with this command:  
+`python ~/StructureAnalysis/3DDistanceHistogram.py RNaseP.pdb TBIA-RNaseP.txt rnasep 95`  
+![RNaseP 3D Histogram](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/ExampleOutputs/TBIA-RNaseP_3DDistancehist_95.0Perc.png)
+
 # draw_3D_RNA_contacts.py
 Draws connections between set of nucleotide pairs on a pdb file using the pymol distance command.  
 
@@ -73,6 +78,11 @@ The `-qcr` flag executes the script via pymol without opening the GUI or printin
 
 ### Output Description
 Generates a pymol session file of the pdb with contacts drawn. The ouput file name is the contact file name with a .pse suffix. For example if the input contact file was RNasePContacts.txt the output would be RNasePContacts.pse  
+
+Example Output:  
+Image from pymol session file of 95th percentile of a RNase P deletion set plotted onto 3DHS.pdb structure generated with this command:  
+`PyMOL -qcr ~/StructureAnalysis/draw_3D_RNA_contacts.py -- TBIA-RNaseP.txt RNaseP.pdb 95`  
+![RNaseP 3D Contacts on PDB](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/ExampleOutputs/TBIA-RNaseP_3D_RNA_Contacts.png)
 
 # AnnotateSecondaryStructure.py  
 Annotates a varna or xrna secondary structure file and generates a SVG file ouput. Available annotations include coloring nucleotides, changing font size and drawing contacts between nucleotides, among others.  
@@ -113,6 +123,11 @@ This script requires the python 2 modules matplotlib, numpy, and Biopython.
 The script will generate a visualization of the secondary structure, with annotations, in the SVG format. SVG files can be open with dedicated SVG viewers like Gapplin or Adobe SVG viewer. Most viewers will allow the user to export svg files in png or pdf formats.  
 SVG files can be edited with Adobe Illustrator.
 
+Example Output:  
+Plot of RNaseP secondary structure annotated with 99th percentile (red) and 95th percentile (cyan) deletions generated with this command:  
+`python ~/StructureAnalysis/AnnotateSecondaryStructure.py RNaseP.xrna TBIA_RNaseP_SecondaryStructureAnnotated.svg -x --percentileLines "TBIA-RNaseP.txt 99 95"`  
+![RNaseP Secondary Structure with Deletion Annotations](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/ExampleOutputs/TBIA_RNaseP_SecondaryStructureAnnotated.png)
+
 # contactDistanceHistogram.py  
 Maps internucleotide pairs onto provided secondary structure in ct format. Returns a histogram of the contact distances between these pairs.  
 The contact distance histrogram is plotted against a histogram of all pairwise distances in the given secondary structure.  
@@ -139,6 +154,11 @@ Example: `python contactDistanceHistogram.py RNasePDeletions.txt rnasep RNasePSe
 ### Output Description
 Generates a pdf with 3 contact distance histograms, one of all contact distances in the deletion file, one of the 97th percentile and one of the 98th. All histograms are plotted over a histogram of all possible contact distances in the secondary structure.  
 
+Example Output:  
+Histograms of contact distances of RNase P deletion set, with 0, 99th and 99.5th percentile cuttoffs, generated with this command:  
+`python ~/StructureAnalysis/contactDistanceHistogram.py TBIA-RNaseP.txt rnasep RNaseP.ct`  
+![RNaseP Contact Distance Histogram](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/ExampleOutputs/TBIA-RNaseP_ContactDistanceHist_99and99_5Perc.png)
+
 # deletionLengthDistribution.py  
 Maps the 1D (sequence length) distance between a list of deletions as a bar chart. The y axis reports the number of unique deletions with a given length. Returns a pdf of all lengths as well as the 98th, 99th and 99.5th percentiles. 
 
@@ -160,6 +180,11 @@ Example: `python deletionLengthDistribution.py RNasePDeletions.txt`
 
 ### Output Description
 PDF file ending in "DelLengthDistribution.pdf" with 4 bar charts. The first compares all deletion lengths (in red) to all possible deletion lengths based on longest deletion observed (in grey). Then next 3 plot deletion lengths filtered for deletion rate by percentile cutoffs (red) against all deletion lengths (blue). By default the percentile cutoffs are 99.5, 99 and 98 but the --custom option can be used to change these.  
+
+Example Output:  
+Deletion length distribution of RNase P deletion set at 0, 50, 75 and 95th percentile cutoffs generated with this command:  
+`python ~/StructureAnalysis/deletionLengthDistribution.py TBIA-RNaseP.txt --custom 95 75 50`  
+![RNaseP Deletion Length Distribution](https://github.com/Weeks-UNC/StructureAnalysis/blob/master/ExampleOutputs/TBIA-RNaseP_Unweighted_Perc95_75_50_DelLengthDistribution.png)
 
 # File Descriptions  
 ### Deletion File
