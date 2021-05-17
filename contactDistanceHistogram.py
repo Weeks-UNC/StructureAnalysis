@@ -11,7 +11,7 @@
 
 #import stuffs
 import matplotlib
-matplotlib.use("PDF")
+#matplotlib.use("PDF")
 from RNAtools2 import CT
 import argparse
 from matplotlib import pyplot as plt

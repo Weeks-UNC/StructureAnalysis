@@ -30,17 +30,15 @@ def parseArgs():
 	prs.add_argument('-c',"--color",type=str,default="black",help="input a color for the experimental histogram")
 	prs.add_argument("--experimentalOnly",action='store_true',help="Plot only the experimental, no background lengths.")
 	prs.add_argument("--inclusivePercentile",action='store_true',help="this option includes deletions not found in the crystal in the calculation of the percentile cutoffs")
-	prs.add_argument("--topDels",action="store",type=int,help="Input an integer. The ouput histograms will then the top deletions of this count rather than percentiles. ie 100 will get the top 100 deletions.")
-	prs.add_argument("--filledLoop", action='store_true',help='labels histograms that the full PDB structure is being used (for RNaseP-Cat)')
-	prs.add_argument("--allOptimal", action='store_true',help='writes out a list of ALL deletions between 10 and 25 Angstroms')
+	prs.add_argument("--topDels",action="store",type=int,help="Input an integer. The ouput histograms will then plot the top deletions of this count rather than percentiles. ie 100 will get the top 100 deletions.")
 	prs.add_argument("--lengthAdjust", type=int, default=0, help='Create background histogram from random Nt pairs that reflect the 1D length of deletions. Requires length of sequence. Assumes structure cassettes included in length.')
 	prs.add_argument("--shapeFile",type=str,default="",help ="A shape file, in .shape format, for each nucleotide")
 	prs.add_argument("--shapeCutoff", type = float, default=0.4, help = "minimum SHAPE reactivity to allow nts with, assumes shapeFile has been given")
 	prs.add_argument("--oneNTSelection",action='store_true',default=False,help="If true, only one nt has to be reactive in deletion, else both do. Assumes a shape file has been given")
 	prs.add_argument("--shift5nt",type=int,default=0,help="Shift all deletion start sites, the 5 prime end, by the input value, either positive or negative")
-	prs.add_argument("--shift3nt",type=int,default=0,help="Shift all deletion start sites, the 3 prime end, by the input value, either positive or negative")
+	prs.add_argument("--shift3nt",type=int,default=0,help="Shift all deletion stop sites, the 3 prime end, by the input value, either positive or negative")
 	prs.add_argument("--centralPoint",action='store_true',default=False,help="Rather than calculating distances between hydroxyl groups, calculate between central point of the base")
-	prs.add_argument("--corrChi",action='store_true',help="Set this option if the input file is chi square correlation file.")
+	prs.add_argument("--corrChi",action='store_true',help="Set this option if the input file is a chi square correlation file.")
 	prs.add_argument("--StrucFilt",action='store',nargs=2,default = [],help="Takes in a CT file and an integer. After Percentile cutoffs, filters deletions by primary and secondary structure distance. Modeled off of DMD filtering procedure.")
 	o = prs.parse_args()
 	return o
@@ -325,14 +323,6 @@ except IndexError:
 
 rxn_dist = getDistances(deletions, pdb, chain)
 
-#if asked for, write out all deletions that span between 10 and 25 angstroms
-if(args.allOptimal):
-	outF = open(args.deletionFile[:-4]+'_optimalDels.txt','w')
-	outF.write('Optimal 10 - 25 Angstrom Deletions\n')
-	for delLine in rxn_dist:
-		if(delLine[3] > 10 and delLine[3] < 25):
-			outF.write(str(delLine[0])+'\t'+str(delLine[1])+'\t'+str(format(delLine[2]))+'\n')
-
 # Calculate median and stdev of deletion frequencies, use as master cutoff for all data.
 median = np.median([i[2] for i in rxn_dist])
 stdev = np.std([i[2] for i in rxn_dist])
@@ -410,8 +400,6 @@ if args.corrChi:
 	title = args.deletionFile[:-5]
 else:
 	title = args.deletionFile[:-4]
-if args.filledLoop:
-	title += "_FilledLoop"
 if args.lengthAdjust != 0:
 	title += "_lengthAdjustedBackground"
 if args.shapeFile != "":
