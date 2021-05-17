@@ -140,12 +140,26 @@ Example: `python contactDistanceHistogram.py RNasePDeletions.txt rnasep RNasePSe
 Generates a pdf with 3 contact distance histograms, one of all contact distances in the deletion file, one of the 97th percentile and one of the 98th. All histograms are plotted over a histogram of all possible contact distances in the secondary structure.  
 
 # deletionLengthDistribution.py  
+Maps the 1D (sequence length) distance between a list of deletions as a bar chart. The y axis reports the number of unique deletions with a given length. Returns a pdf of all lengths as well as the 98th, 99th and 99.5th percentiles. 
 
 ### Requirements
-### Required Inputs
-### Execution Instructions
-### Optional Inputs
+This script requires the python 2 modules matplotlib and numpy.  
+
+### Required Inputs  
+**Deletion File** - list of nucleotide pairs and their frequency. See *File Description* section at bottom of readme for more detail.  
+
+### Execution Instructions  
+`python deletionLengthDistribution.py DeletionFile.txt`  
+Example: `python deletionLengthDistribution.py RNasePDeletions.txt`  
+
+### Optional Inputs  
+`-w,--weighted` - Weighs the height of bars by the frequency (column 4 value) of each deletion with the given length.  
+`--custom Percentile1 Percentile2 Percentile3` - Change the percentile cutoffs to 3 user provided values. All should be between 0 and 100.  
+`-n,--noBackground` - Plots just deletion lengths without comparing them to all deletion lengths.  
+`-l,--length SequenceLength` - Specify length of sequence. Used to calculate distribution of all possible deletion lengths.
+
 ### Output Description
+PDF file ending in "DelLengthDistribution.pdf" with 4 bar charts. The first compares all deletion lengths (in red) to all possible deletion lengths based on longest deletion observed (in grey). Then next 3 plot deletion lengths filtered for deletion rate by percentile cutoffs (red) against all deletion lengths (blue). By default the percentile cutoffs are 99.5, 99 and 98 but the --custom option can be used to change these.  
 
 # File Descriptions  
 ### Deletion File
